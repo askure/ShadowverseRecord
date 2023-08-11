@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShadowverseRecorderController">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShadowverseRecorderController">
    <center>
       <VBox prefHeight="700.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
@@ -78,7 +78,7 @@
                               <Label layoutX="106.0" layoutY="56.0" text="デッキ追加" />
                               <TextField fx:id="AddDeck" layoutX="106.0" layoutY="109.0" />
                               <ChoiceBox fx:id="DefalutClass" layoutX="106.0" layoutY="84.0" prefWidth="150.0" />
-                              <Button layoutX="155.0" layoutY="154.0" mnemonicParsing="false" onAction="#AddDeckAction" text="登録" />
+                              <Button fx:id="addDeck" layoutX="155.0" layoutY="154.0" mnemonicParsing="false" onAction="#PassPhrase" text="登録" />
                            </children></AnchorPane>
                     </content>
                   </Tab>

@@ -3,11 +3,14 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
-public class ShadowverseRecorderController{
+public class ShadowverseRecorderController implements Initializable{
 	@FXML
     private ResourceBundle resources;
 
@@ -27,10 +30,21 @@ public class ShadowverseRecorderController{
     private ChoiceBox<String> DefalutClass;
     
     @FXML
-    void initialize() {
-        assert EnemyClass != null : "fx:id=\"EnemyClass\" was not injected: check your FXML file 'ShadowverseRecorder.fxml'.";
+    private Button addDeck;
+    
+    private 
+    
+    @FXML
+    void PassPhrase(ActionEvent event) {
+    	int index = DefalutClass.getSelectionModel().selectedIndexProperty().intValue();
+    	System.out.println(AddDeck.getText() +"(" + DefalutClass.getItems().get(index) + ")");
+    }
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		assert EnemyClass != null : "fx:id=\"EnemyClass\" was not injected: check your FXML file 'ShadowverseRecorder.fxml'.";
         assert myClass != null : "fx:id=\"myClass\" was not injected: check your FXML file 'ShadowverseRecorder.fxml'.";
         DefalutClass.getItems().addAll("エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス");
         AddDeck.setPromptText("デッキ名を入力");
-    }
+	}
 }
