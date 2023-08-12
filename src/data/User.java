@@ -17,7 +17,7 @@ public class User {
 	private List<String>Memo;
 	private String path = "./Record/UserData.csv";
 	
-	User(){
+	public User(){
 		Arkey = new DuplicateMap<>();
 		Memo = new ArrayList<>();
 	}
@@ -39,11 +39,11 @@ public class User {
 		
 	}
 	
-	void AddList(String c,String Arkey,String Memo) {
+	public void AddList(String c,String Arkey,String Memo) {
 		if(Arkey.length() > 20)return;
 		this.Arkey.put(c, Arkey);
 	}
-	void DeleateList(String c,String Arkey) {
+	public void DeleateList(String c,String Arkey) {
 		int index = this.Arkey.indexOf(c,Arkey);
 		if(index== -1)return;
 		this.Arkey.remove(c, index);
@@ -51,7 +51,7 @@ public class User {
 	void ChangeName(String name) {
 		playerName = name;
 	}
-	void ReadCSV() {
+	public void ReadCSV() {
 		CraeateCSV();
 		try {
 			List<String> lines =Files.readAllLines(Paths.get(path),Charset.forName("UTF-8"));
@@ -64,7 +64,7 @@ public class User {
 			e.printStackTrace();
 		}
 	}
-	void WriteCSV() {
+	public void WriteCSV() {
 		CraeateCSV();
 		try {
 			File file = new File(path);
@@ -83,6 +83,17 @@ public class User {
 	
 	public String GetName() {
 		return playerName;
+	}
+	
+	public List<String> ArkeyToString() {
+		List<String> s = new ArrayList<String>();
+		for(String c : Arkey.keyset()) {
+			for(String a: Arkey.get(c)) {
+				//System.out.println(c+","+a);
+				s.add(a + "(" + c + ")");
+			}
+		}
+		return s;
 	}
 	public DuplicateMap<String,String>  GetArkey(){
 		return Arkey;

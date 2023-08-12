@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShadowverseRecorderController">
+<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShadowverseRecorderController">
    <center>
       <VBox prefHeight="700.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>
@@ -24,18 +24,19 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button layoutX="108.0" layoutY="357.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="登録" textAlignment="RIGHT" />
-                              <Label layoutX="124.0" layoutY="27.0" prefHeight="17.0" prefWidth="152.0" text="            対戦結果入力" />
-                              <VBox layoutX="59.0" layoutY="77.0" prefHeight="128.0" prefWidth="263.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="20.0">
+                              <Button fx:id="ResultButton" layoutX="108.0" layoutY="357.0" mnemonicParsing="false" onAction="#AddResult" prefHeight="25.0" prefWidth="186.0" text="登録" textAlignment="RIGHT" />
+                              <Label layoutX="71.0" layoutY="28.0" prefHeight="17.0" prefWidth="283.0" text="            対戦結果入力(勝った方にチェック)" />
+                              <VBox layoutX="59.0" layoutY="77.0" prefHeight="131.0" prefWidth="298.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="20.0">
                                  <children>
-                                    <HBox prefHeight="67.0" prefWidth="286.0">
+                                    <HBox prefHeight="65.0" prefWidth="298.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" prefHeight="17.0" prefWidth="11.0" />
-                                          <ChoiceBox fx:id="myClass" prefWidth="150.0">
+                                          <CheckBox fx:id="MyCheck" mnemonicParsing="false" onAction="#OnMyCheck" prefHeight="17.0" prefWidth="11.0" />
+                                          <ChoiceBox fx:id="MyClass" prefWidth="150.0">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
                                           </ChoiceBox>
+                                          <ChoiceBox fx:id="First" prefHeight="21.0" prefWidth="68.0" />
                                        </children>
                                        <padding>
                                           <Insets bottom="20.0" left="40.0" right="20.0" top="20.0" />
@@ -43,8 +44,9 @@
                                     </HBox>
                                     <HBox prefHeight="61.0" prefWidth="264.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" />
+                                          <CheckBox fx:id="EnemyCheck" mnemonicParsing="false" onAction="#OnEnemyCheck" />
                                           <ChoiceBox fx:id="EnemyClass" prefWidth="150.0" />
+                                          <Label fx:id="FirstLabel" prefHeight="17.0" prefWidth="72.0" text="　　先攻" textAlignment="RIGHT" />
                                        </children>
                                        <padding>
                                           <Insets bottom="20.0" left="40.0" right="20.0" top="20.0" />
@@ -62,6 +64,7 @@
                                     <Font name="Candara" size="12.0" />
                                  </font>
                               </Label>
+                              <Label fx:id="Buttleinfo" layoutX="76.0" layoutY="418.0" prefHeight="17.0" prefWidth="283.0" text="対戦結果を登録しました" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -76,9 +79,13 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <Label layoutX="106.0" layoutY="56.0" text="デッキ追加" />
+                              <Label layoutX="106.0" layoutY="211.0" text="デッキ削除" />
                               <TextField fx:id="AddDeck" layoutX="106.0" layoutY="109.0" />
                               <ChoiceBox fx:id="DefalutClass" layoutX="106.0" layoutY="84.0" prefWidth="150.0" />
-                              <Button fx:id="addDeck" layoutX="155.0" layoutY="154.0" mnemonicParsing="false" onAction="#PassPhrase" text="登録" />
+                              <Button fx:id="AddDeckButton" layoutX="155.0" layoutY="154.0" mnemonicParsing="false" onAction="#PassPhrase" text="登録" />
+                              <ChoiceBox fx:id="DeleateDeckList" layoutX="106.0" layoutY="235.0" prefWidth="150.0" />
+                              <Button fx:id="DeleateDeckButton" layoutX="161.0" layoutY="279.0" mnemonicParsing="false" onAction="#Deleate" text="削除" />
+                              <Label fx:id="InfoText" layoutX="106.0" layoutY="333.0" prefHeight="17.0" prefWidth="158.0" text="デッキ削除が完了しました" />
                            </children></AnchorPane>
                     </content>
                   </Tab>
