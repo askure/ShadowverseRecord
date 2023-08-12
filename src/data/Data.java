@@ -19,7 +19,7 @@ public class Data {
 	private List<String> EnemyClass;
 	private List<String> Arkey;
 	private List<Boolean> Result;
-	private List<Boolean> First;
+	private List<String> First;
 	private String path = "./Record/Data.csv";
 	public Data(){
 		Time = new ArrayList<>();		
@@ -57,6 +57,12 @@ public class Data {
 			Collections.reverse(lines);
 			String now = new Timestamp(System.currentTimeMillis()).toString();
 			String nowdate = now.substring(0,10);
+			Time.clear();
+			PlayerClass.clear();
+			Arkey.clear();
+			EnemyClass.clear();
+			Result.clear();
+			First.clear();
 			for(int i=0; i<lines.size(); i++) {
 				if(i== lines.size()) return;
 				String[] data = lines.get(i).split(",");
@@ -70,14 +76,14 @@ public class Data {
 				Arkey.add(data[2]);
 				EnemyClass.add(data[3]);
 				Result.add(Boolean.parseBoolean(data[4]));
-				First.add(Boolean.parseBoolean(data[5]));			
+				First.add(data[5]);			
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-	public void WriteCSV(String playerclass,String enemyclass,String arkey,Boolean result,Boolean first) {
+	public void WriteCSV(String playerclass,String enemyclass,String arkey,Boolean result,String first) {
 		CraeateCSV();
 		try {
 			Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -90,6 +96,7 @@ public class Data {
 			e.printStackTrace();
 		}
 	}
+	
 	//クラス指定
 	public int[] Result(String p,String e) {
 		ReadCSV();
@@ -104,10 +111,10 @@ public class Data {
 					&&!EnemyClass.get(i).equals(e)) || !PlayerClass.get(i).equals(""))continue;
 			if(Result.get(i)) sum_win++;
 			if(!Result.get(i))sum_lose++;
-			if(Result.get(i) && First.get(i)) f_win++;
-			if(Result.get(i) && !First.get(i)) s_win++;
-			if(!Result.get(i) && First.get(i)) f_lose++;
-			if(!Result.get(i) && !First.get(i)) s_lose++;
+			if(Result.get(i) && First.get(i).equals("先攻")) f_win++;
+			if(Result.get(i) && !First.get(i).equals("先攻") ) s_win++;
+			if(!Result.get(i) && First.get(i).equals("先攻")) f_lose++;
+			if(!Result.get(i) && !First.get(i).equals("先攻")) s_lose++;
 		}
 		//先攻勝利,先攻敗北,後攻勝利,後攻敗北,合計勝利,合計敗北
 		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
@@ -126,10 +133,11 @@ public class Data {
 		for(int i=0;i < Result.size(); i++) {
 			if(Result.get(i)) sum_win++;
 			if(!Result.get(i))sum_lose++;
-			if(Result.get(i) && First.get(i)) f_win++;
-			if(Result.get(i) && !First.get(i)) s_win++;
-			if(!Result.get(i) && First.get(i)) f_lose++;
-			if(!Result.get(i) && !First.get(i)) s_lose++;
+			if(First.get(i).equals("null")) continue;
+			if(Result.get(i) && First.get(i).equals("先攻")) f_win++;
+			if(Result.get(i) && !First.get(i).equals("先攻")) s_win++;
+			if(!Result.get(i) && First.get(i).equals("先攻")) f_lose++;
+			if(!Result.get(i) && !First.get(i).equals("先攻")) s_lose++;
 		}
 		//先攻勝利,先攻敗北,後攻勝利,後攻敗北,合計勝利,合計敗北
 		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
@@ -150,10 +158,10 @@ public class Data {
 					&&!EnemyClass.get(i).equals(e)&& !Arkey.get(i).equals(a))|| !PlayerClass.get(i).equals(""))continue;
 			if(Result.get(i)) sum_win++;
 			if(!Result.get(i))sum_lose++;
-			if(Result.get(i) && First.get(i)) f_win++;
-			if(Result.get(i) && !First.get(i)) s_win++;
-			if(!Result.get(i) && First.get(i)) f_lose++;
-			if(!Result.get(i) && !First.get(i)) s_lose++;
+			if(Result.get(i) && First.get(i).equals("先攻")) f_win++;
+			if(Result.get(i) && !First.get(i).equals("先攻")) s_win++;
+			if(!Result.get(i) && First.get(i).equals("先攻")) f_lose++;
+			if(!Result.get(i) && !First.get(i).equals("先攻")) s_lose++;
 		}
 		//先攻勝利,先攻敗北,後攻勝利,後攻敗北,合計勝利,合計敗北
 		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
@@ -174,7 +182,7 @@ public class Data {
 	public List<Boolean> GetResult(){
 		return Result;
 	}
-	public List<Boolean> GetFirst(){
+	public List<String> GetFirst(){
 		return First;
 	}
 	
