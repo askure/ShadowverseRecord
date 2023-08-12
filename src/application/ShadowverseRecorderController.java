@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 public class ShadowverseRecorderController implements Initializable{
@@ -38,6 +40,9 @@ public class ShadowverseRecorderController implements Initializable{
     
     @FXML
     private ChoiceBox<String> DeleateDeckList;
+    
+    @FXML
+    private ChoiceBox<String> ResultDeck;
    
     @FXML
     private Label FirstLabel;
@@ -63,6 +68,12 @@ public class ShadowverseRecorderController implements Initializable{
     
     @FXML
     private CheckBox MyCheck;
+    
+    @FXML
+    private TableView<String> ResultView;
+    
+    @FXML
+    private TableColumn<String, String> EnemyClassColumn;
     
     private User user;
     
@@ -108,6 +119,7 @@ public class ShadowverseRecorderController implements Initializable{
         	else
         		FirstLabel.setText("   先攻");
         });
+    	ResultView.getItems().add("a");
 	}
 	
     @FXML
@@ -148,15 +160,15 @@ public class ShadowverseRecorderController implements Initializable{
     void AddResult(ActionEvent event) {
     	boolean e = EnemyCheck.selectedProperty().get();
     	boolean m = MyCheck.selectedProperty().get();
-    	boolean f = false;
+    	String f = "";
     	int mindex = MyClass.getSelectionModel().selectedIndexProperty().intValue();
     	int eindex = EnemyClass.getSelectionModel().selectedIndexProperty().intValue();
     	
     	int findex = First.getSelectionModel().selectedIndexProperty().intValue();
-    	if(findex == -1 || findex ==1) f = false;
-    	else if(findex == 0) f = true;
+    	if(findex == -1) f = "null";
+    	else f = First.getItems().get(findex);
     	//System.out.println(AddDeck.getText() +"(" + DefalutClass.getItems().get(index) + ")");
-    	if(mindex == -1 || eindex == -1) {
+    	if(mindex == -1 || eindex == -1 || mindex == 0) {
     		Buttleinfo.setText("デッキを選択してください");
     		return;
     	}
@@ -168,14 +180,16 @@ public class ShadowverseRecorderController implements Initializable{
     	String es = EnemyClass.getItems().get(eindex);
     	if(ms.contains("(")) {
     		String[] add = ms.replace("(",",").replace(")", ",").split(",");
-    		if(findex != -1)data.WriteCSV(add[1], es, add[0], m, f);
-    		else data.WriteCSV(add[1], es, add[0], m, null);
+    		data.WriteCSV(add[1], es, add[0], m, f);
+    		
     	}
     	else {
-    		if(findex != -1)data.WriteCSV(ms, es,"", m, f);
-    		else data.WriteCSV(ms, es,"", m, null);
+    		data.WriteCSV(ms, es,"", m, f);
     	}
     	Buttleinfo.setText("勝敗登録が完了しました");
+    	System.out.println(data.Result()[0] + "/" + (data.Result()[0] + data.Result()[1]));
+    	System.out.println(data.Result()[2] + "/" + (data.Result()[2] + data.Result()[3]));
+    	System.out.println(data.Result()[4] + "/" + (data.Result()[4] + data.Result()[5]));
     	Init();
     }
 	
@@ -194,6 +208,7 @@ public class ShadowverseRecorderController implements Initializable{
 		DeleateDeckList.getSelectionModel().select("");
 		AddDeck.setText("");
 		DefalutClass.getSelectionModel().select("");
+		FirstLabel.setText("");
 		
 		
 	}
