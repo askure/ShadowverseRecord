@@ -72,10 +72,10 @@
                            <children>
                               <TableView fx:id="ResultView" fixedCellSize="0.0" layoutX="-1.0" layoutY="115.0" prefHeight="547.0" prefWidth="400.0">
                                 <columns>
-                                  <TableColumn fx:id="EnemyClassColumn" editable="false" prefWidth="98.66665649414062" sortable="false" text="相手のクラス" />
-                                    <TableColumn editable="false" prefWidth="98.6666259765625" sortable="false" text="勝ち" />
-                                    <TableColumn editable="false" prefWidth="88.66668701171875" sortable="false" text="負け" />
-                                    <TableColumn editable="false" prefWidth="112.66668701171875" sortable="false" text="勝率" />
+                                  <TableColumn fx:id="EnemyClassColumn" editable="false" prefWidth="91.33334350585938" sortable="false" text="相手のクラス" />
+                                    <TableColumn fx:id="FirstColumn" editable="false" prefWidth="101.3333740234375" sortable="false" text="先攻" />
+                                    <TableColumn fx:id="SecondColumn" editable="false" prefWidth="100.6666259765625" sortable="false" text="後攻" />
+                                    <TableColumn fx:id="AllColumn" editable="false" prefWidth="106.66668701171875" sortable="false" text="全体" />
                                 </columns>
                               </TableView>
                               <ChoiceBox fx:id="ResultDeck" layoutY="59.0" prefHeight="25.0" prefWidth="400.0" />

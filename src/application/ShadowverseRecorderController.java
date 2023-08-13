@@ -1,9 +1,11 @@
 package application;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import data.Data;
+import data.Resulter;
 import data.User;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ShadowverseRecorderController implements Initializable{
 	@FXML
@@ -70,14 +73,26 @@ public class ShadowverseRecorderController implements Initializable{
     private CheckBox MyCheck;
     
     @FXML
-    private TableView<String> ResultView;
+    private TableView<Resulter> ResultView;
     
     @FXML
-    private TableColumn<String, String> EnemyClassColumn;
+    private TableColumn<Resulter, String> EnemyClassColumn;
+    
+    @FXML
+    private TableColumn<Resulter, String> FirstColumn;
+    
+    @FXML
+    private TableColumn<Resulter, String> SecondColumn;
+    
+    @FXML
+    private TableColumn<Resulter, String> AllColumn;
+    
     
     private User user;
     
     private Data data;
+    
+    private String[] AllClass = {"エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス"};
     
     @FXML
     void PassPhrase(ActionEvent event) {
@@ -99,8 +114,8 @@ public class ShadowverseRecorderController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		assert EnemyClass != null : "fx:id=\"EnemyClass\" was not injected: check your FXML file 'ShadowverseRecorder.fxml'.";
         assert MyClass != null : "fx:id=\"myClass\" was not injected: check your FXML file 'ShadowverseRecorder.fxml'.";
-        DefalutClass.getItems().addAll("エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス");
-        EnemyClass.getItems().addAll("エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス");
+        DefalutClass.getItems().addAll(Arrays.asList(AllClass));
+        EnemyClass.getItems().addAll(Arrays.asList(AllClass));
         AddDeck.setPromptText("デッキ名を入力");
         user  = new User();
         user.ReadCSV();
@@ -111,6 +126,13 @@ public class ShadowverseRecorderController implements Initializable{
         First.getItems().addAll("先攻","後攻");
         FirstLabel.setText("");
         Buttleinfo.setText("");
+        ResultDeck.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> 
+        observ, Number oldVal, Number newVal)->{
+        	int newnum = newVal.intValue();
+        	if(newnum != -1)ChangeResultView(ResultDeck.getItems().get(newnum));
+        	
+        });
+    	
     	First.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> 
         observ, Number oldVal, Number newVal)->{
         	int newnum = newVal.intValue();
@@ -119,7 +141,15 @@ public class ShadowverseRecorderController implements Initializable{
         	else
         		FirstLabel.setText("   先攻");
         });
-    	ResultView.getItems().add("a");
+    	 EnemyClassColumn.setCellValueFactory(new PropertyValueFactory<>("EnemyClass"));
+    	 FirstColumn.setCellValueFactory(new PropertyValueFactory<>("First"));
+    	 SecondColumn.setCellValueFactory(new PropertyValueFactory<>("Second"));
+    	 AllColumn.setCellValueFactory(new PropertyValueFactory<>("All"));
+    	 
+    	 Resulter a = new Resulter("エルフ","12-0(100%)","12-0(100%)","24-0(100%)");
+    	 ResultView.getItems().add(a);
+    	 ChangeResultView("");
+    	
 	}
 	
     @FXML
@@ -168,7 +198,7 @@ public class ShadowverseRecorderController implements Initializable{
     	if(findex == -1) f = "null";
     	else f = First.getItems().get(findex);
     	//System.out.println(AddDeck.getText() +"(" + DefalutClass.getItems().get(index) + ")");
-    	if(mindex == -1 || eindex == -1 || mindex == 0) {
+    	if(mindex == -1 || eindex == -1 || MyClass.getItems().get(mindex).equals("----------")) {
     		Buttleinfo.setText("デッキを選択してください");
     		return;
     	}
@@ -193,13 +223,64 @@ public class ShadowverseRecorderController implements Initializable{
     	Init();
     }
 	
+    void ChangeResultView(String s) {
+    	ResultView.getItems().clear();
+    	System.out.println(s);
+    	if(s.equals("") || s.equals("----------")) {
+    		for(String e: AllClass) {
+    			int[] r = data.Result(e);
+    			String[] rs = ResultIntToString(r);
+    			Resulter a = new Resulter(e,rs[0],rs[1],rs[2]);
+    			ResultView.getItems().add(a);
+    		}
+    		int[] r = data.Result();
+    		String[] rs = ResultIntToString(r);
+			Resulter a = new Resulter("全体",rs[0],rs[1],rs[2]);
+			ResultView.getItems().add(a);
+    		
+    	}
+    	else {
+        	if(s.contains("(")) {
+        		String[] result = s.replace("(",",").replace(")", ",").split(",");
+        		for(String e: AllClass) {
+        			int[] r = data.Result(result[1],result[0],e);
+        			String[] rs = ResultIntToString(r);
+        			Resulter a = new Resulter(e,rs[0],rs[1],rs[2]);
+        			ResultView.getItems().add(a);
+        		}
+        		
+        	}
+        	else {
+        		for(String e: AllClass) {
+        			int[] r = data.Result(s,e);
+        			String[] rs = ResultIntToString(r);
+        			Resulter a = new Resulter(e,rs[0],rs[1],rs[2]);
+        			ResultView.getItems().add(a);
+        		}
+        	}
+    	}
+    }
+    
+    String[] ResultIntToString(int[] r) {
+    	String[] rs = new String[3];
+    	double fwinrate = (r[0]+ r[1] == 0) ? 0 :(Math.round((double)r[0]/(r[0]+r[1]) * 100)/100.0) * 100;
+    	double swinrate = (r[2]+ r[3] == 0) ? 0 :(Math.round((double)r[2]/(r[2]+r[3]) * 100)/100.0) * 100;
+    	double awinrate = (r[4]+ r[5] == 0) ? 0 :(Math.round((double)r[4]/(r[4]+r[5]) * 100)/100.0) * 100;
+    	rs[0] = String.valueOf(r[0]) + "-" + String.valueOf(r[1])+ "(" + String.valueOf(fwinrate) + "%)";
+    	rs[1] = String.valueOf(r[2]) + "-" + String.valueOf(r[3])+ "(" + String.valueOf(swinrate) + "%)";
+    	rs[2] = String.valueOf(r[4]) + "-" + String.valueOf(r[5])+ "(" + String.valueOf(awinrate) + "%)";
+    	return rs;
+    }
 	void ChangeChoiceBox() {
 		MyClass.getItems().clear();
+		ResultDeck.getItems().clear();
 		DeleateDeckList.getItems().clear();
 		//user.ReadCSV();
 		MyClass.getItems().addAll(user.ArkeyToString());
         DeleateDeckList.getItems().addAll(user.ArkeyToString());
         MyClass.getItems().addAll( "----------","エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス");
+        ResultDeck.getItems().addAll(user.ArkeyToString());
+        ResultDeck.getItems().addAll( "----------","エルフ","ロイヤル","ウィッチ","ドラゴン","ネクロマンサー","ヴァンパイア","ビショップ","ネメシス");
         Init();
 	}
 	
@@ -208,8 +289,8 @@ public class ShadowverseRecorderController implements Initializable{
 		DeleateDeckList.getSelectionModel().select("");
 		AddDeck.setText("");
 		DefalutClass.getSelectionModel().select("");
-		FirstLabel.setText("");
-		
-		
+		FirstLabel.setText("");	
+		InfoText.setText("");
+		ChangeResultView("");
 	}
 }
