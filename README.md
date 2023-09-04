@@ -1,0 +1,2 @@
+# ShadowverseRecord
+バグとか要望ありましたらIssuesに書くかアスクレに連絡お願いします。
