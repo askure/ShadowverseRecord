@@ -2,6 +2,7 @@ package data;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -46,6 +47,22 @@ public class Data {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public void ResetCSV() {
+		Path p = Paths.get(path);
+		if(!Files.exists(p)) {
+			return;
+		}
+		try {
+			Files.delete(p);
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		
+		ReadCSV();
 		
 	}
 	
@@ -169,7 +186,51 @@ public class Data {
 		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
 		return result;
  	}
-	
+	public int[] MyResult(String p) {
+		ReadCSV();
+		int f_win  = 0;
+		int f_lose = 0;
+		int s_win  = 0;
+		int s_lose = 0;
+		int sum_win = 0;
+		int sum_lose = 0;
+		for(int i=0;i < Result.size(); i++) {
+			if(!PlayerClass.get(i).equals(p)) continue;
+			if(Result.get(i)) sum_win++;
+			if(!Result.get(i))sum_lose++;
+			if(First.get(i).equals("null")) continue;
+			if(Result.get(i) && First.get(i).equals("先攻")) f_win++;
+			if(Result.get(i) && !First.get(i).equals("先攻")) s_win++;
+			if(!Result.get(i) && First.get(i).equals("先攻")) f_lose++;
+			if(!Result.get(i) && !First.get(i).equals("先攻")) s_lose++;
+		}
+		//先攻勝利,先攻敗北,後攻勝利,後攻敗北,合計勝利,合計敗北
+		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
+		return result;
+	}
+	public int[] MyResult(String p,String a) {
+		ReadCSV();
+		int f_win  = 0;
+		int f_lose = 0;
+		int s_win  = 0;
+		int s_lose = 0;
+		int sum_win = 0;
+		int sum_lose = 0;
+		for(int i=0;i < Result.size(); i++) {
+			if((!PlayerClass.get(i).equals(p)
+					|| !Arkey.get(i).equals(a)))continue;
+			if(Result.get(i)) sum_win++;
+			if(!Result.get(i))sum_lose++;
+			if(First.get(i).equals("null")) continue;
+			if(Result.get(i) && First.get(i).equals("先攻")) f_win++;
+			if(Result.get(i) && !First.get(i).equals("先攻")) s_win++;
+			if(!Result.get(i) && First.get(i).equals("先攻")) f_lose++;
+			if(!Result.get(i) && !First.get(i).equals("先攻")) s_lose++;
+		}
+		//先攻勝利,先攻敗北,後攻勝利,後攻敗北,合計勝利,合計敗北
+		int[] result = {f_win,f_lose,s_win,s_lose,sum_win,sum_lose}; 
+		return result;
+	}
 	//クラスとアーキ指定
 	public int[] Result(String p,String a,String e) {
 		ReadCSV();
