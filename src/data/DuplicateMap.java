@@ -25,7 +25,9 @@ public class DuplicateMap<K,V> {
 	public V get(K k,int index) {
 		return m.get(k).size()-1< index ? null: m.get(k).get(index);
 	}
-	
+	public void clear() {
+		m.clear();
+	}
 	public void remove(K k,int index) {
 		m.get(k).remove(index);
 	}

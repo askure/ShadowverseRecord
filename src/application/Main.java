@@ -14,7 +14,9 @@ public class Main extends Application {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("ShadowverseRecorder.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("ShadowverseRecorder");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

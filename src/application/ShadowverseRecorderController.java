@@ -65,6 +65,8 @@ public class ShadowverseRecorderController implements Initializable{
     @FXML
     private Button ResultButton;
     
+    @FXML
+    private Button DataReset;
     
     @FXML
     private CheckBox EnemyCheck;
@@ -109,6 +111,15 @@ public class ShadowverseRecorderController implements Initializable{
     	Init();
     	
     }
+    
+    @FXML
+    void Reset() {
+    	user.ResetCSV();
+    	data.ResetCSV();
+    	ChangeChoiceBox();
+    	Init();
+    	InfoText.setText("全てのデータを削除しました。");
+    }
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -145,9 +156,6 @@ public class ShadowverseRecorderController implements Initializable{
     	 FirstColumn.setCellValueFactory(new PropertyValueFactory<>("First"));
     	 SecondColumn.setCellValueFactory(new PropertyValueFactory<>("Second"));
     	 AllColumn.setCellValueFactory(new PropertyValueFactory<>("All"));
-    	 
-    	 Resulter a = new Resulter("エルフ","12-0(100%)","12-0(100%)","24-0(100%)");
-    	 ResultView.getItems().add(a);
     	 ChangeResultView("");
     	
 	}
@@ -248,6 +256,11 @@ public class ShadowverseRecorderController implements Initializable{
         			Resulter a = new Resulter(e,rs[0],rs[1],rs[2]);
         			ResultView.getItems().add(a);
         		}
+        		int[] r = data.MyResult(result[1],result[0]);
+        		String[] rs = ResultIntToString(r);
+    			Resulter a = new Resulter("全体",rs[0],rs[1],rs[2]);
+    			ResultView.getItems().add(a);
+        		
         		
         	}
         	else {
@@ -257,6 +270,10 @@ public class ShadowverseRecorderController implements Initializable{
         			Resulter a = new Resulter(e,rs[0],rs[1],rs[2]);
         			ResultView.getItems().add(a);
         		}
+        		int[] r = data.MyResult(s);
+        		String[] rs = ResultIntToString(r);
+    			Resulter a = new Resulter("全体",rs[0],rs[1],rs[2]);
+    			ResultView.getItems().add(a);
         	}
     	}
     }
@@ -266,9 +283,9 @@ public class ShadowverseRecorderController implements Initializable{
     	double fwinrate = (r[0]+ r[1] == 0) ? 0 :(Math.round((double)r[0]/(r[0]+r[1]) * 100)/100.0) * 100;
     	double swinrate = (r[2]+ r[3] == 0) ? 0 :(Math.round((double)r[2]/(r[2]+r[3]) * 100)/100.0) * 100;
     	double awinrate = (r[4]+ r[5] == 0) ? 0 :(Math.round((double)r[4]/(r[4]+r[5]) * 100)/100.0) * 100;
-    	rs[0] = String.valueOf(r[0]) + "-" + String.valueOf(r[1])+ "(" + String.valueOf(fwinrate) + "%)";
-    	rs[1] = String.valueOf(r[2]) + "-" + String.valueOf(r[3])+ "(" + String.valueOf(swinrate) + "%)";
-    	rs[2] = String.valueOf(r[4]) + "-" + String.valueOf(r[5])+ "(" + String.valueOf(awinrate) + "%)";
+    	rs[0] = (r[0]+ r[1] == 0) ? "-":String.valueOf(r[0]) + "-" + String.valueOf(r[1])+ "(" + String.valueOf(fwinrate) + "%)";
+    	rs[1] = (r[0]+ r[1] == 0) ? "-":String.valueOf(r[2]) + "-" + String.valueOf(r[3])+ "(" + String.valueOf(swinrate) + "%)";
+    	rs[2] = (r[4]+ r[5] == 0) ? "-":String.valueOf(r[4]) + "-" + String.valueOf(r[5])+ "(" + String.valueOf(awinrate) + "%)";
     	return rs;
     }
 	void ChangeChoiceBox() {
@@ -287,6 +304,7 @@ public class ShadowverseRecorderController implements Initializable{
 	void Init() {
 		First.getSelectionModel().select("");
 		DeleateDeckList.getSelectionModel().select("");
+		ResultDeck.getSelectionModel().select("----------");
 		AddDeck.setText("");
 		DefalutClass.getSelectionModel().select("");
 		FirstLabel.setText("");	

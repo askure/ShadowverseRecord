@@ -2,6 +2,7 @@ package data;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -38,7 +39,19 @@ public class User {
 		}
 		
 	}
-	
+	public void ResetCSV() {
+		Path p = Paths.get(path);
+		if(!Files.exists(p)) {
+			return;
+		}
+		try {
+			Files.delete(p);
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		ReadCSV();
+	}
 	public void AddList(String c,String Arkey,String Memo) {
 		if(Arkey.length() > 20)return;
 		this.Arkey.put(c, Arkey);
@@ -56,6 +69,7 @@ public class User {
 		try {
 			List<String> lines =Files.readAllLines(Paths.get(path),Charset.forName("UTF-8"));
 			playerName = lines.get(0);
+			Arkey.clear();
 			for(int i=2;i<lines.size(); i++) {
 				String[] data = lines.get(i).split(",");
 				Arkey.put(data[0],data[1]);
